@@ -49,6 +49,11 @@ See the paper. (Citation block to be added on preprint posting.)
 Questions about reproducing these results? Contact the author:
 **Nicholas Kasdaglis** — nicholas@toppsystems.com
 
+## Patent / Intellectual Property
+
+**Patent pending.** The methods described and implemented here are the subject of a pending U.S. patent application (Provisional App. No. 64/094,751). This repository is for transparency and reproducibility; the license covers copyright only — **no patent license is granted, and all patent rights are reserved** (see `PATENTS`). Commercial use and any practice of the methods require separate written permission.
+
 ## License
 
-See `LICENSE`.
+This work (code, data, audit cards, docs) is licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)** — share/adapt with attribution, **non-commercial only**. See `LICENSE`. Patent rights are reserved (see `PATENTS` and the Patent section above).
+
