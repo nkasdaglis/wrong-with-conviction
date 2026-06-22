@@ -21,6 +21,7 @@ header{background:#0d1117;color:#fff;padding:18px 20px} header h1{margin:0;font-
 .row{display:flex;gap:12px;padding:7px 0;border-bottom:1px solid #f3f4f6} .row b{flex:0 0 120px;color:var(--mut)}
 code{background:#eef1f4;padding:1px 5px;border-radius:5px;font-size:12px}
 .chk{margin:0;padding-left:16px} .ck{color:var(--ok)} .cx{color:var(--bad)}
+.codeblk{background:#0d1117;color:#c9d1d9;border-radius:7px;padding:10px;font-size:12px;white-space:pre-wrap;overflow:auto;margin:0 0 6px}
 .vbtn{background:var(--pow);color:#fff;border:0;padding:6px 12px;border-radius:7px;font-size:13px;cursor:pointer}
 .vout{font-weight:700;margin-left:8px} .formula{color:var(--mut);font-size:12px;margin-top:6px}
 #decl{margin:18px 0;padding:16px;background:#fff;border:1px solid #d0d7de;border-radius:10px}
@@ -83,6 +84,9 @@ VERDICT: ALL CONTROLS PASS — the audit tester recomputes correctly, catches pl
     <div class="row"><b>Source</b><div><a href="data/semantic_entropy_nli_gemma27b_result.json" target="_blank"><code>experiments\epsilon_qwen_2026_06_08\outputs\semantic_entropy_nli_gemma27b_result.json</code></a> &middot; sha16 <code>19f54d11ef7a7e5f</code> &middot; <a href="data/semantic_entropy_nli_gemma27b_result.json" target="_blank">view source JSON &#8599;</a></div></div>
     <div class="row"><b>Statistical test</b><div>AUROC (semantic entropy -&gt; error), rank-based Mann-Whitney U; bootstrap 95% CI; TriviaQA positive control = double dissociation</div></div>
     <div class="row"><b>Power / rigor</b><div>n=800 (Gemma-2-27B); 12 models / 4 families all &lt;0.60 &middot; <span class="tier tpow">POWERED</span></div></div>
+    <div class="row"><b>Computation</b><div><pre class="codeblk"># semantic_entropy_nli_*.py  -&gt; recomputed by audit.py G3
+auroc(SE=[it[&#x27;SE&#x27;] for it in per_item],
+      labels=[it[&#x27;err&#x27;] for it in per_item])   # rank-based Mann-Whitney U; n=800</pre><small>How the number is computed. The &#9654; Verify button runs this live; <code>prove_audit_harness.py</code> confirms the recompute engine matches scikit-learn to 1e-9 &mdash; the reference is tested.</small></div></div>
     <div class="row"><b>Sanity checks</b><ul class="chk"><li class="ck">PASS n matches</li><li class="ck">PASS AUROC in useless band (&lt;0.60)</li><li class="ck">PASS both classes present (non-degenerate)</li><li class="ck">PASS SE has variance (not all-equal)</li></ul></div>
     <div class="row"><b>Result</b><div>AUROC_SE_to_error_aggregate = <b>0.527</b> &middot; CI [0.489, 0.565] &middot; n=800</div></div>
     <div class="row"><b>Verify</b><div><button class="vbtn" onclick="verify('G3')">&#9654; Verify in browser</button> <span id="vout_G3" class="vout"></span><div class="formula">recompute: <code>AUROC(SE, err)</code> on the embedded data; baked result <b>0.5275</b> vs paper <b>0.527</b></div><br><small>Reproduce locally: <code>python scripts/audit.py G3</code></small></div></div>
@@ -99,6 +103,11 @@ VERDICT: ALL CONTROLS PASS — the audit tester recomputes correctly, catches pl
     <div class="row"><b>Source</b><div><a href="data/c1_detector_Qwen2p5-0p5B-Instruct_result.json" target="_blank"><code>experiments\epsilon_qwen_2026_06_08\outputs\c1_detector_Qwen2p5-0p5B-Instruct_result.json</code></a> &middot; sha16 <code>491f5f1b30c4737f</code> &middot; <a href="data/c1_detector_Qwen2p5-0p5B-Instruct_result.json" target="_blank">view source JSON &#8599;</a></div></div>
     <div class="row"><b>Statistical test</b><div>AUROC + permutation p + bootstrap CI; cleared confound floor; vs confidence baseline; held-out 5-fold</div></div>
     <div class="row"><b>Power / rigor</b><div>confident-wrong n=1715 (0.5B); perm p=0.001; independent re-impl 0.787 &middot; <span class="tier tpow">POWERED (PI-ratified 2026-06-22)</span></div></div>
+    <div class="row"><b>Computation</b><div><pre class="codeblk"># c1_detector_14b.py finalize()
+Xc = X[margin &gt; median(margin)]            # confident subset
+Xdc = within_dataset_deconfound(Xc)        # subtract per-dataset mean
+oof = grouped_5fold_OOF_probe(Xdc, y, entity_groups)
+auroc(y, oof)   # 0.731; clears confound_floor 0.566; perm p=0.001</pre><small>How the number is computed. The &#9654; Verify button runs this live; <code>prove_audit_harness.py</code> confirms the recompute engine matches scikit-learn to 1e-9 &mdash; the reference is tested.</small></div></div>
     <div class="row"><b>Sanity checks</b><ul class="chk"><li class="ck">PASS clears confound floor</li><li class="ck">PASS permutation significant (p&lt;0.05)</li><li class="ck">PASS beats confidence baseline</li><li class="ck">PASS prereg PASS</li></ul></div>
     <div class="row"><b>Result</b><div>H1_detector.auroc = <b>0.731</b> &middot; CI [0.715, 0.746] &middot; n=1715</div></div>
     <div class="row"><b>Verify</b><div><span class="prov">Provenance tier &mdash; stored value <b>0.731</b>; the raw per-item array is not in this summary file, so live recompute needs the raw capture (phase 2.1). Confirm vs the paper number.</span><br><small>Reproduce locally: <code>python scripts/audit.py A1</code></small></div></div>
@@ -115,6 +124,9 @@ VERDICT: ALL CONTROLS PASS — the audit tester recomputes correctly, catches pl
     <div class="row"><b>Source</b><div><a href="data/se_kinematic_join_result.json" target="_blank"><code>experiments\epsilon_qwen_2026_06_08\outputs\se_kinematic_join_result.json</code></a> &middot; sha16 <code>89a553ad79aa9d93</code> &middot; <a href="data/se_kinematic_join_result.json" target="_blank">view source JSON &#8599;</a></div></div>
     <div class="row"><b>Statistical test</b><div>AUROC (open-gen SE vs forced-choice error; non-circular cross-task)</div></div>
     <div class="row"><b>Power / rigor</b><div>n=250 (115 wrong / 135 correct) &middot; <span class="tier tpow">POWERED</span></div></div>
+    <div class="row"><b>Computation</b><div><pre class="codeblk"># se_kinematic_join.py
+fc = layerwise_features[&#x27;y&#x27;][item_index]   # INDEPENDENT forced-choice label
+auroc(SE[fc==1], SE[fc==0])   # 0.443; expect ~0.5 = blind across tasks</pre><small>How the number is computed. The &#9654; Verify button runs this live; <code>prove_audit_harness.py</code> confirms the recompute engine matches scikit-learn to 1e-9 &mdash; the reference is tested.</small></div></div>
     <div class="row"><b>Sanity checks</b><ul class="chk"><li class="ck">PASS n = fc_wrong + fc_correct</li><li class="ck">PASS non-circular (independent task)</li><li class="ck">PASS inversion direction (&lt;0.5 or near)</li></ul></div>
     <div class="row"><b>Result</b><div>AUROC_SE_fc... = <b>0.443</b> &middot; CI [0.375, 0.516] &middot; n=250</div></div>
     <div class="row"><b>Verify</b><div><button class="vbtn" onclick="verify('G4')">&#9654; Verify in browser</button> <span id="vout_G4" class="vout"></span><div class="formula">recompute: <code>AUROC(SE, forced-choice-wrong)</code> on the embedded data; baked result <b>0.4428</b> vs paper <b>0.443</b></div><br><small>Reproduce locally: <code>python scripts/audit.py G4</code></small></div></div>
@@ -131,6 +143,9 @@ VERDICT: ALL CONTROLS PASS — the audit tester recomputes correctly, catches pl
     <div class="row"><b>Source</b><div><a href="data/r2_cross_vendor_risk_coverage_result.json" target="_blank"><code>experiments\epsilon_qwen_2026_06_08\outputs\r2_cross_vendor_risk_coverage_result.json</code></a> &middot; sha16 <code>5a6a337f5ecb7210</code> &middot; <a href="data/r2_cross_vendor_risk_coverage_result.json" target="_blank">view source JSON &#8599;</a></div></div>
     <div class="row"><b>Statistical test</b><div>selective prediction: detector vs calibrated confidence at matched coverage (entity-grouped)</div></div>
     <div class="row"><b>Power / rigor</b><div>danger-zone n=1500 (Qwen-1.5B) &middot; <span class="tier tpow">POWERED</span></div></div>
+    <div class="row"><b>Computation</b><div><pre class="codeblk"># r2_cross_vendor_risk_coverage
+(danger_zone[&#x27;cov_0.7&#x27;][&#x27;detector&#x27;]
+ - danger_zone[&#x27;cov_0.7&#x27;][&#x27;confidence&#x27;]) * 100   # = 6.4 pp</pre><small>How the number is computed. The &#9654; Verify button runs this live; <code>prove_audit_harness.py</code> confirms the recompute engine matches scikit-learn to 1e-9 &mdash; the reference is tested.</small></div></div>
     <div class="row"><b>Sanity checks</b><ul class="chk"><li class="ck">PASS det&gt;conf @cov_0.9 (gate beats calibrated confidence)</li><li class="ck">PASS det_minus_conf @cov_0.9 ~5.7</li><li class="ck">PASS det_minus_conf @cov_0.7 ~6.4</li><li class="ck">PASS entity-grouped detector AUROC &gt; 0.8</li></ul></div>
     <div class="row"><b>Result</b><div>DANGER_ZONE det_minus_conf_pp @cov_0.7 = <b>6.4</b> &middot; n=1500</div></div>
     <div class="row"><b>Verify</b><div><button class="vbtn" onclick="verify('B1')">&#9654; Verify in browser</button> <span id="vout_B1" class="vout"></span><div class="formula">recompute: <code>(detector - confidence) x 100</code> on the embedded data; baked result <b>6.4</b> vs paper <b>6.4</b></div><br><small>Reproduce locally: <code>python scripts/audit.py B1</code></small></div></div>
@@ -147,6 +162,9 @@ VERDICT: ALL CONTROLS PASS — the audit tester recomputes correctly, catches pl
     <div class="row"><b>Source</b><div><a href="data/regime_router_powered_gemma2b_result.json" target="_blank"><code>experiments\epsilon_qwen_2026_06_08\outputs\regime_router_powered_gemma2b_result.json</code></a> &middot; sha16 <code>357adda1c79c8cae</code> &middot; <a href="data/regime_router_powered_gemma2b_result.json" target="_blank">view source JSON &#8599;</a></div></div>
     <div class="row"><b>Statistical test</b><div>router vs best-single-fix; McNemar p; bootstrap 95% CI; leave-one-source-out leakage control</div></div>
     <div class="row"><b>Power / rigor</b><div>n=1013 (Gemma-2-2B) &middot; <span class="tier tpow">POWERED</span></div></div>
+    <div class="row"><b>Computation</b><div><pre class="codeblk"># regime_router_powered.py
+mean(learned) - max(mean(trap), mean(ord))   # router vs best single fix
+# McNemar p&lt;0.001; bootstrap CI excludes 0; LOSO leakage control</pre><small>How the number is computed. The &#9654; Verify button runs this live; <code>prove_audit_harness.py</code> confirms the recompute engine matches scikit-learn to 1e-9 &mdash; the reference is tested.</small></div></div>
     <div class="row"><b>Sanity checks</b><ul class="chk"><li class="ck">PASS ordering router&gt;best-single&gt;base</li><li class="ck">PASS gain boot95 CI excludes 0</li><li class="ck">PASS McNemar p&lt;0.001</li><li class="ck">PASS leakage-controlled (heldout-source routing present)</li></ul></div>
     <div class="row"><b>Result</b><div>gain_over_best_single_fix = <b>0.0711</b> &middot; CI [0.0513, 0.0908] &middot; n=1013</div></div>
     <div class="row"><b>Verify</b><div><button class="vbtn" onclick="verify('C4')">&#9654; Verify in browser</button> <span id="vout_C4" class="vout"></span><div class="formula">recompute: <code>mean(learned) - max(mean(trap), mean(ord))</code> on the embedded data; baked result <b>0.0711</b> vs paper <b>0.0711</b></div><br><small>Reproduce locally: <code>python scripts/audit.py C4</code></small></div></div>
@@ -163,6 +181,8 @@ VERDICT: ALL CONTROLS PASS — the audit tester recomputes correctly, catches pl
     <div class="row"><b>Source</b><div><a href="data/regime_router_powered_gemma2b_result.json" target="_blank"><code>experiments\epsilon_qwen_2026_06_08\outputs\regime_router_powered_gemma2b_result.json</code></a> &middot; sha16 <code>357adda1c79c8cae</code> &middot; <a href="data/regime_router_powered_gemma2b_result.json" target="_blank">view source JSON &#8599;</a></div></div>
     <div class="row"><b>Statistical test</b><div>end-to-end base -&gt; router accuracy lift</div></div>
     <div class="row"><b>Power / rigor</b><div>n=1013 (Gemma-2-2B) &middot; <span class="tier tpow">POWERED</span></div></div>
+    <div class="row"><b>Computation</b><div><pre class="codeblk"># regime_router_powered.py
+mean(learned) - mean(base)   # end-to-end governor accuracy lift</pre><small>How the number is computed. The &#9654; Verify button runs this live; <code>prove_audit_harness.py</code> confirms the recompute engine matches scikit-learn to 1e-9 &mdash; the reference is tested.</small></div></div>
     <div class="row"><b>Sanity checks</b><ul class="chk"><li class="ck">PASS router &gt; base</li><li class="ck">PASS lift in +13..+20.5 headline span</li></ul></div>
     <div class="row"><b>Result</b><div>LEARNED_router - BASE = <b>0.2044</b> &middot; n=1013</div></div>
     <div class="row"><b>Verify</b><div><button class="vbtn" onclick="verify('F1')">&#9654; Verify in browser</button> <span id="vout_F1" class="vout"></span><div class="formula">recompute: <code>mean(learned) - mean(base)</code> on the embedded data; baked result <b>0.2043</b> vs paper <b>0.2044</b></div><br><small>Reproduce locally: <code>python scripts/audit.py F1</code></small></div></div>
@@ -179,6 +199,9 @@ VERDICT: ALL CONTROLS PASS — the audit tester recomputes correctly, catches pl
     <div class="row"><b>Source</b><div><a href="data/anti_transfer_matrix_qwen0.5b_result.json" target="_blank"><code>experiments\epsilon_qwen_2026_06_08\outputs\anti_transfer_matrix_qwen0.5b_result.json</code></a> &middot; sha16 <code>55163ebfdc70bdc4</code> &middot; <a href="data/anti_transfer_matrix_qwen0.5b_result.json" target="_blank">view source JSON &#8599;</a></div></div>
     <div class="row"><b>Statistical test</b><div>steering transfer matrix; bootstrap</div></div>
     <div class="row"><b>Power / rigor</b><div>exploratory n &middot; <span class="tier texp">EXPLORATORY - style-confound (DOWNGRADED)</span></div></div>
+    <div class="row"><b>Computation</b><div><pre class="codeblk"># anti_transfer_matrix; within-regime CROSS-dataset transfer
+net_median = -0.752   (no cell CI &gt; 0)
+# -&gt; axes are dataset/style-specific (Marin confound) -&gt; DOWNGRADED</pre><small>How the number is computed. The &#9654; Verify button runs this live; <code>prove_audit_harness.py</code> confirms the recompute engine matches scikit-learn to 1e-9 &mdash; the reference is tested.</small></div></div>
     <div class="row"><b>Sanity checks</b><ul class="chk"><li class="ck">PASS honest downgrade recorded (STYLE-CONFOUND)</li><li class="ck">PASS flagged EXPLORATORY (not a finding)</li><li class="ck">PASS trap-anti-transfer diagnostics present</li></ul></div>
     <div class="row"><b>Result</b><div>verdict_tag = <b>STYLE-CONFOUND (anti-transfer DOWNGRADED)</b></div></div>
     <div class="row"><b>Verify</b><div><span class="prov">Provenance tier &mdash; stored value <b>STYLE-CONFOUND (anti-transfer DOWNGRADED)</b>; the raw per-item array is not in this summary file, so live recompute needs the raw capture (phase 2.1). Confirm vs the paper number.</span><br><small>Reproduce locally: <code>python scripts/audit.py C3</code></small></div></div>
@@ -195,6 +218,8 @@ VERDICT: ALL CONTROLS PASS — the audit tester recomputes correctly, catches pl
     <div class="row"><b>Source</b><div><a href="data/governance_lora_result.json" target="_blank"><code>experiments\epsilon_qwen_2026_06_08\outputs\governance_lora_result.json</code></a> &middot; sha16 <code>facb4658cd9f6ec9</code> &middot; <a href="data/governance_lora_result.json" target="_blank">view source JSON &#8599;</a></div></div>
     <div class="row"><b>Statistical test</b><div>held-out-category accuracy lift (regime-matched LoRA)</div></div>
     <div class="row"><b>Power / rigor</b><div>n=189 held-out category &middot; <span class="tier tpow">POWERED</span></div></div>
+    <div class="row"><b>Computation</b><div><pre class="codeblk"># governance_lora
+lora_heldout_category_acc - base_heldout_category_acc   # 0.852 - 0.561 = 0.291 (held-out categories)</pre><small>How the number is computed. The &#9654; Verify button runs this live; <code>prove_audit_harness.py</code> confirms the recompute engine matches scikit-learn to 1e-9 &mdash; the reference is tested.</small></div></div>
     <div class="row"><b>Sanity checks</b><ul class="chk"><li class="ck">PASS base ~0.561</li><li class="ck">PASS LoRA ~0.852</li><li class="ck">PASS lift positive + held-out (not in-sample)</li></ul></div>
     <div class="row"><b>Result</b><div>lift (held-out category) = <b>0.291</b> &middot; n=189</div></div>
     <div class="row"><b>Verify</b><div><button class="vbtn" onclick="verify('D1')">&#9654; Verify in browser</button> <span id="vout_D1" class="vout"></span><div class="formula">recompute: <code>lora_acc - base_acc</code> on the embedded data; baked result <b>0.291</b> vs paper <b>0.291</b></div><br><small>Reproduce locally: <code>python scripts/audit.py D1</code></small></div></div>
