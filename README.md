@@ -44,6 +44,11 @@ are added.
 
 See the paper. (Citation block to be added on preprint posting.)
 
+## Contact
+
+Questions about reproducing these results? Contact the author:
+**Nicholas Kasdaglis** — nicholas@toppsystems.com
+
 ## License
 
 See `LICENSE`.
