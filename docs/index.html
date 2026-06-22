@@ -35,7 +35,7 @@ button#genbtn{background:var(--pow);color:#fff;border:0;padding:9px 16px;border-
   <div class="stat"><b>8</b><span>load-bearing results</span></div>
   <div class="stat"><b id="nm">6/8</b><span>recompute MATCH</span></div>
   <div class="stat"><b>6</b><span>live in-browser verify</span></div>
-  <div class="stat"><b>6/8</b><span>POWERED</span></div>
+  <div class="stat"><b>7/8</b><span>POWERED</span></div>
   <div class="stat"><b id="rv">0/8</b><span>PI reviewed</span></div>
 </div>
 <div class="proof"><b>The verifier is itself proven.</b> <code>scripts/prove_audit_harness.py</code>: the recompute AUROC equals
@@ -91,14 +91,14 @@ VERDICT: ALL CONTROLS PASS — the audit tester recomputes correctly, catches pl
 <div class="card" data-id="A1">
   <div class="chead" onclick="tog('A1')">
     <span class="cid">A1</span><span class="cclaim">Supervised internal-state probe DETECTS confident error. Qwen-0.5B AUROC = 0.731, CI [0.715,0.746], perm p=0.001; clears confound floor 0.566; beats c</span>
-    <span class="badge prov">PROV</span><span class="tier texp">EXPLORATORY (file flag) - powered-grade; PI upgrade pending</span>
+    <span class="badge prov">PROV</span><span class="tier tpow">POWERED (PI-ratified 2026-06-22)</span>
     <label class="rev" onclick="event.stopPropagation()"><input type="checkbox" class="revbox" data-id="A1" onchange="upd()"> reviewed</label>
   </div>
   <div class="cbody" id="b_A1">
     <div class="row"><b>Claim</b><div>Supervised internal-state probe DETECTS confident error. Qwen-0.5B AUROC = 0.731, CI [0.715,0.746], perm p=0.001; clears confound floor 0.566; beats confidence baseline 0.633. Paper: Sec VI + Fig 2.</div></div>
     <div class="row"><b>Source</b><div><code>experiments\epsilon_qwen_2026_06_08\outputs\c1_detector_Qwen2p5-0p5B-Instruct_result.json</code> &middot; sha16 <code>491f5f1b30c4737f</code></div></div>
     <div class="row"><b>Statistical test</b><div>AUROC + permutation p + bootstrap CI; cleared confound floor; vs confidence baseline; held-out 5-fold</div></div>
-    <div class="row"><b>Power / rigor</b><div>confident-wrong n=1715 (0.5B); perm p=0.001; independent re-impl 0.787 &middot; <span class="tier texp">EXPLORATORY (file flag) - powered-grade; PI upgrade pending</span></div></div>
+    <div class="row"><b>Power / rigor</b><div>confident-wrong n=1715 (0.5B); perm p=0.001; independent re-impl 0.787 &middot; <span class="tier tpow">POWERED (PI-ratified 2026-06-22)</span></div></div>
     <div class="row"><b>Sanity checks</b><ul class="chk"><li class="ck">PASS clears confound floor</li><li class="ck">PASS permutation significant (p&lt;0.05)</li><li class="ck">PASS beats confidence baseline</li><li class="ck">PASS prereg PASS</li></ul></div>
     <div class="row"><b>Result</b><div>H1_detector.auroc = <b>0.731</b> &middot; CI [0.715, 0.746] &middot; n=1715</div></div>
     <div class="row"><b>Verify</b><div><span class="prov">Provenance tier &mdash; stored value <b>0.731</b>; the raw per-item array is not in this summary file, so live recompute needs the raw capture (phase 2.1). Confirm vs the paper number.</span><br><small>Reproduce locally: <code>python scripts/audit.py A1</code></small></div></div>
