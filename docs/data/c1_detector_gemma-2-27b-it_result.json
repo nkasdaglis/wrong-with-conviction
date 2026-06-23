@@ -1,0 +1,63 @@
+{
+ "experiment": "C1_detector_refusal_14B",
+ "model_id": "google/gemma-2-27b-it",
+ "model_sha16": "74ca36bee640853c",
+ "dtype": "torch.bfloat16",
+ "feat_dim": 13824,
+ "pool_n": 7710,
+ "confident_n": 3819,
+ "confident_WRONG_n": 161,
+ "n_entity_groups": 3255,
+ "EXPLORATORY": true,
+ "H1_detector": {
+  "auroc": 0.775,
+  "ci95": [
+   0.733,
+   0.814
+  ],
+  "perm_p": 0.001,
+  "confound_floor": 0.578,
+  "clears_floor": true,
+  "confidence_baseline_auroc": 0.745,
+  "PASS_preregistered": true
+ },
+ "H2_refusal": {
+  "full_coverage_acc": 0.958,
+  "selective_acc_at_50pct": 0.985,
+  "random_abstain_at_50pct": 0.958,
+  "curve": [
+   {
+    "coverage": 0.5,
+    "detector_selective_acc": 0.985,
+    "random_abstain_acc": 0.958
+   },
+   {
+    "coverage": 0.6,
+    "detector_selective_acc": 0.983,
+    "random_abstain_acc": 0.958
+   },
+   {
+    "coverage": 0.7,
+    "detector_selective_acc": 0.983,
+    "random_abstain_acc": 0.958
+   },
+   {
+    "coverage": 0.8,
+    "detector_selective_acc": 0.979,
+    "random_abstain_acc": 0.958
+   },
+   {
+    "coverage": 0.9,
+    "detector_selective_acc": 0.974,
+    "random_abstain_acc": 0.958
+   },
+   {
+    "coverage": 1.0,
+    "detector_selective_acc": 0.958,
+    "random_abstain_acc": 0.958
+   }
+  ],
+  "PASS_preregistered": true
+ },
+ "PREREGISTERED_VERDICT": "BOTH PASS at 14B"
+}
