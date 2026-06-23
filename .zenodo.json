@@ -1,0 +1,23 @@
+{
+  "title": "Wrong With Conviction: Why Confident Errors Evade Detection in Language Models — code, data, and reproducibility audit",
+  "upload_type": "software",
+  "description": "Code, datasets, result files, and the claim-by-claim interactive reproducibility audit for the paper 'Wrong With Conviction: Why Confident Errors Evade Detection in Language Models.' Includes the participation-ratio theorem validation, the semantic-entropy double dissociation, the supervised commitment-band detector, the regime router, the subspace mechanism, and the integrated Governor.",
+  "creators": [
+    { "name": "Kasdaglis, Nicholas", "affiliation": "TOPP Interactive Design, LLC", "orcid": "0009-0004-6452-6543" }
+  ],
+  "license": "cc-by-nc-4.0",
+  "access_right": "open",
+  "keywords": [
+    "hallucination detection",
+    "AI governance",
+    "large language models",
+    "interpretability",
+    "AI safety",
+    "confidence calibration",
+    "trust calibration",
+    "reproducibility"
+  ],
+  "related_identifiers": [
+    { "relation": "isSupplementTo", "identifier": "10.5281/zenodo.20820157", "scheme": "doi" }
+  ]
+}
